@@ -1,20 +1,39 @@
 # product-coach
 
-**Turn Claude Code into your virtual product leadership team.**
+**A review layer for product decisions.**
 
-product-coach gives any project a virtual *product* team: a strategy coach, a skeptical Chief Strategy Officer, an OKR reviewer, and a full growth team — rooted in the fundamentals product leaders actually use (Playing to Win, Rumelt's kernel, JTBD, OKRs, hard trade-offs, growth loops, Aim·Move·Prove, experiment design). Each coach is a Claude Code skill you invoke by name.
+Engineering teams review each other's code before it ships. Product teams do not review each other's decisions. A brief can rest on an assumption nobody tested; a roadmap can repeat a bet the team already lost. The cost shows up two quarters later.
 
-The premise: **every project deserves to be treated as a product** — a startup, an enterprise initiative, a side hack. That means a written strategy, measurable outcomes, and deliberate trade-offs, before (and while) you build.
+product-coach argues with a decision using the team's own numbers — and then records whether its own objection turned out to be right.
 
-## Install
+It has two surfaces, and the split is the design:
+
+| | What it does | Where it runs |
+| --- | --- | --- |
+| **The coaches** | Interview you, apply a framework by name, refuse the soft answer, and leave a written artifact in your repo. | Claude Code skills, in your own repo. Free. |
+| **The scoreboard** | Watches for the check date, keeps the ledger of calls, and delivers a verdict on its own advice. | A web app. |
+
+A skill can object. It cannot verify — that needs a durable record checked against a real outcome at a later date. So the coaching is free and the scorekeeping is the product.
+
+## The coaches
 
 ```bash
 cd /path/to/product-coach && bash setup
 ```
 
-`setup` symlinks each skill into `~/.claude/skills/`, so the source of truth stays here and every skill updates with zero drift. Re-run `setup` after adding new skills.
+`setup` symlinks each skill into `~/.claude/skills/`, so the source of truth stays here and every skill updates with zero drift. Adding a coach is adding a directory under `skills/` — nothing else to register. Re-run `setup` afterwards.
 
 **New here? Read [docs/using-the-skills.md](docs/using-the-skills.md)** — the skills are coaches, not report generators: bring a real product challenge with real numbers, expect to be interviewed, expect pushback, and get a written artifact in your repo's `product/` directory at the end. The guide has a which-coach-for-which-situation table and a worked end-to-end example.
+
+## The app
+
+```bash
+pnpm install && pnpm dev
+```
+
+Next.js at the repo root, so the project imports to v0 and deploys from Vercel unchanged. Copy `.env.example` to `.env` and fill in the keys before running a review.
+
+**Status: in progress.** The review screen and the experiment history are in place; the objection engine, the ledger, and the backtest are being built. See [docs/build-log.md](docs/build-log.md) for what works today.
 
 ## The skills
 
@@ -75,18 +94,26 @@ Strategy gates OKRs; OKRs gate the roadmap; the roadmap gates the build. On the 
 ## Repo layout
 
 ```
-skills/       one directory per skill (SKILL.md) — symlinked into ~/.claude/skills/
+app/          the Next.js app — pages, API routes, the dark design system
+components/   UI components
+lib/          types, the experiment corpus, and the model, coach and ledger code
+skills/       one directory per coach (SKILL.md) — symlinked into ~/.claude/skills/
 frameworks/   distilled framework rules — the editable source of truth skills inline
 templates/    the product/ scaffold that /product-init copies into target repos
-docs/         using-the-skills.md — the user guide · roadmap.md — what's shipped and what's next
+scripts/      repo checks, run with node
+docs/         using-the-skills.md — the user guide · roadmap.md — what's shipped and next
 ```
 
-**Convention:** skills are self-contained (framework rules inlined) so they work standalone once symlinked; `frameworks/` is where the rules get edited, then re-inlined into skills. Every skill declares a persona, what it refuses to do, a stage gate, and an input/output contract on `product/` files.
+**Two conventions hold this together.**
+
+*Skills are self-contained.* Framework rules are inlined so a skill works standalone once symlinked; `frameworks/` is where the rules get edited, then re-inlined. Every skill declares a persona, what it refuses to do, a stage gate, and an input/output contract on `product/` files.
+
+*The UI layer is regenerable; the rest is not.* `app/**/page.tsx`, `components/`, and `globals.css` are presentation and can be regenerated wholesale. Everything under `lib/`, `scripts/`, and `app/api/` is hand-owned. Pages never inline a fetch or a prompt — they call typed functions from `lib/`. So a screen can be redrawn from scratch without touching a contract.
 
 ## How it grows
 
-New coaching material lands in three places, in this order — see [docs/roadmap.md](docs/roadmap.md) for what's shipped and what's queued. Rules distilled into `frameworks/`, then a coach built on top in `skills/`, then any new deliverable format added to `templates/product/`.
+Adding a coach touches nothing but its own directory: rules distilled into `frameworks/`, a coach built on top in `skills/`, and any new deliverable format added to `templates/product/`. `setup` and the plugin manifest both discover `skills/*/` by scanning, so there is no registry to update. See [docs/roadmap.md](docs/roadmap.md) for what's shipped and what's queued.
 
 ## Status
 
-Personal toolkit. Fifteen skills across three chains: strategy, execution, and growth. Not packaged for public release.
+Fifteen coaches across three chains: strategy, execution, and growth. The app is early — see [docs/build-log.md](docs/build-log.md).
