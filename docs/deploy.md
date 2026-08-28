@@ -62,7 +62,19 @@ Two of these steps need access to the Vercel account, so they are done by hand.
    Protection, so preview URLs require a login. Worth doing whether or not a
    key is set, because previews of this app show a real experiment history.
 
-4. **Confirm it took.** Open `/api/health` on the deployed URL. It reports
+4. **Turn on Web Analytics** under the project's Analytics tab. The
+   `@vercel/analytics` package is already installed and `<Analytics />` is
+   already mounted in `app/layout.tsx`, but the package collects nothing until
+   the feature is enabled for the project. Page views start arriving within
+   about 30 seconds of the next visit.
+
+   Two things suppress the data and are easy to mistake for a broken setup.
+   Deployment Protection means only logged-in visits are ever counted, so
+   volume stays near zero while the deployment is private. And the component is
+   wrapped in a `NODE_ENV === 'production'` check, so nothing is sent from
+   `pnpm dev`. Both are intended.
+
+5. **Confirm it took.** Open `/api/health` on the deployed URL. It reports
    which variables are present, how many experiments loaded, and the commit
    that is live. It never returns a value, only whether one is set.
 
