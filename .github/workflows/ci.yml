@@ -1,0 +1,38 @@
+name: CI
+
+# Runs on every push. Vercel deploys from the same commits, so this is the
+# gate that catches a broken build before it becomes a broken deployment.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      # The corpus header states its own statistics. This recomputes them, so a
+      # data edit that changes the separation cannot land unnoticed.
+      - name: Check the experiment corpus
+        run: node scripts/check-corpus.mjs
+
+      # Builds without any secrets present, which is deliberate: nothing may
+      # read a key at build time, only when a request comes in.
+      - name: Build
+        run: pnpm build

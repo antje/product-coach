@@ -31,7 +31,9 @@ cd /path/to/product-coach && bash setup
 pnpm install && pnpm dev
 ```
 
-Next.js sits at the repo root, so the project imports to v0 and deploys from Vercel unchanged. Copy `.env.example` to `.env` and fill in the keys before running a review.
+Next.js sits at the repo root. Copy `.env.example` to `.env` and fill in the keys before running a review.
+
+The repo connects straight to Vercel through GitHub. Every push to `main` deploys to production and every pull request gets a preview URL. See [docs/deploy.md](docs/deploy.md) for the one-time setup and for `/api/health`, which tells you whether a deployment actually has its keys.
 
 **Status: in progress.** The review screen and the experiment history are in place. The objection engine, the ledger, and the backtest are still being built. See [docs/build-log.md](docs/build-log.md) for what works today.
 
