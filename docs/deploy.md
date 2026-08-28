@@ -4,11 +4,16 @@ The repo connects to Vercel directly through GitHub. There is no v0 in the
 loop. Every push to `main` becomes a production deployment, and every pull
 request gets its own preview URL, with no extra configuration.
 
-> **Before putting a live key on a reachable deployment.** `/api/review` has no
-> rate limit and no spend ceiling yet. `DEMO_REVIEWS_PER_SESSION` and
-> `DEMO_DAILY_COST_CEILING_USD` are named in `.env.example` but nothing reads
-> them. Until that code exists, either keep the deployment behind Deployment
-> Protection, or use a key from a spend-capped Anthropic workspace, or both.
+> **Before putting a live key on a deployment that has no login.** Set
+> `DEMO_REVIEWS_PER_SESSION` and `DEMO_DAILY_COST_CEILING_USD`. Both are
+> checked before the model is called, so a blocked request costs nothing.
+> `/api/health` reports whether they are set, and both showing `null` on a
+> reachable deployment means `/api/review` is uncapped.
+>
+> The counters are in memory, so they reset on redeploy and are per instance.
+> They are a speed bump sized to a demo, not a defence. Deployment Protection
+> and a spend-capped key are what actually keep a stranger from costing you
+> money.
 
 ## Why not v0
 

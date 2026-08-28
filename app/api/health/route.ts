@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { guardrailStatus } from '@/lib/coach/guardrails'
 import { EXPERIMENTS } from '@/lib/data/corpus'
 
 export const runtime = 'nodejs'
@@ -21,6 +22,8 @@ export async function GET() {
   return NextResponse.json({
     ok: configured.anthropicApiKey,
     configured,
+    // Both null on a deployment anyone can reach means /api/review is uncapped.
+    guardrails: guardrailStatus(),
     experimentsLoaded: EXPERIMENTS.length,
     commit: process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? 'local',
     environment: process.env.VERCEL_ENV ?? 'development',

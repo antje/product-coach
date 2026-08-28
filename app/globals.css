@@ -129,6 +129,68 @@ h2 { font-size: 18px; letter-spacing: -.025em; margin: 0; line-height: 1.3; font
 .page-footer { justify-content: space-between; color: #667067; border-top: 1px solid var(--line-soft); margin-top: 47px; padding-top: 17px; font-size: 10px; }
 .page-footer strong { color: #a1aaa1; font-weight: 400; }
 .sync-dot { width: 5px; height: 5px; margin-left: 7px; }
+/* Editable fields. They read as text until you touch them, so the brief still
+   looks like a document rather than a form. */
+.edit-title, .edit-hypothesis, .edit-strong, .edit-small, select.edit-strong, select.edit-small {
+  width: 100%; background: transparent; color: inherit; border: 1px solid transparent;
+  border-radius: 4px; padding: 3px 6px; margin-left: -6px; font-family: inherit;
+}
+.edit-title:hover, .edit-hypothesis:hover, .edit-strong:hover, .edit-small:hover { border-color: var(--line); }
+.edit-title:focus, .edit-hypothesis:focus, .edit-strong:focus, .edit-small:focus {
+  outline: none; border-color: #587442; background: #191d17;
+}
+.edit-title:disabled, .edit-hypothesis:disabled, .edit-strong:disabled, .edit-small:disabled { opacity: .55; }
+.edit-title { font-size: 18px; font-weight: 600; letter-spacing: -.025em; }
+.edit-hypothesis { color: #dce0dc; line-height: 1.6; font-size: 14px; margin-top: 8px; resize: vertical; }
+.edit-strong { font-size: 13px; font-weight: 500; margin-top: 8px; display: block; }
+.edit-small { color: var(--muted-foreground); font-size: 11px; margin-top: 3px; display: block; }
+select.edit-strong, select.edit-small { text-transform: capitalize; appearance: none; cursor: pointer; }
+.edit-row { display: flex; align-items: baseline; gap: 5px; }
+.edit-number { width: 5.5ch; flex: none; text-align: right; }
+.edit-number-wide { width: 7ch; }
+.edit-unit, .edit-prefix { color: var(--muted-foreground); font-size: 11px; white-space: nowrap; }
+.edit-unit { font-size: 13px; }
+
+.details-toggle {
+  display: flex; align-items: center; gap: 8px; width: 100%; background: transparent;
+  border: 0; border-top: 1px solid var(--line-soft); color: var(--muted-foreground);
+  font-size: 11px; padding: 15px 0; text-align: left;
+}
+.details-toggle svg:last-child { margin-left: auto; transition: transform .15s; }
+.details-toggle svg.flipped { transform: rotate(180deg); }
+.details-body { border-top: 1px solid var(--line-soft); padding: 18px 0 4px; }
+.guardrail-row { display: flex; align-items: center; gap: 6px; margin-top: 8px; }
+.guardrail-row .edit-small:first-child { flex: 1; }
+
+/* The coach's four other states. */
+.coach-symbol.error { color: var(--red); border-color: #6b3d33; box-shadow: 0 0 0 7px #2a1c19; }
+.review-status.declined { color: var(--lime); }
+.check-icon { display: grid; place-items: center; border: 1px solid var(--lime); width: 17px; height: 17px; border-radius: 50%; }
+.objection-copy.quiet { color: #7d857d; font-size: 12px; }
+
+.issue-list { border-top: 1px solid var(--line); }
+.issue { border-bottom: 1px solid var(--line-soft); padding: 16px 0; }
+.issue-message { color: #dce0dc; font-size: 13px; line-height: 1.6; margin: 0; }
+.issue-arithmetic {
+  display: block; font-family: var(--font-mono); font-size: 11px; color: #9ea69d;
+  background: #14180f; border: 1px solid var(--line-soft); border-radius: 4px;
+  padding: 9px 11px; margin: 11px 0; overflow-x: auto; white-space: nowrap;
+}
+.issue-remedy { color: var(--lime); font-size: 12px; line-height: 1.55; margin: 10px 0 0; }
+
+/* The prediction is the falsifiable part, so it gets its own frame. */
+.prediction { border: 1px solid var(--line); border-left-width: 2px; border-radius: 5px; padding: 15px 16px; margin: 0 0 24px; }
+.prediction.high { border-left-color: var(--lime); }
+.prediction.medium { border-left-color: var(--amber); }
+.prediction.low { border-left-color: #586259; }
+.prediction-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: .13em; color: #929b92; }
+.prediction p { color: #dce0dc; font-size: 13px; line-height: 1.6; margin: 10px 0 9px; }
+.prediction strong { color: var(--foreground); font-weight: 600; }
+.prediction small { display: block; color: var(--muted-foreground); font-size: 11px; line-height: 1.5; }
+
+.decision-note { color: #9ea69d; font-size: 11px; line-height: 1.55; margin: 12px 0 0; }
+.dropped-note { color: var(--red); font-size: 11px; padding: 0 0 18px; margin: 0; }
+
 @keyframes spin { to { transform: rotate(360deg); } } @keyframes load { 0% { transform: translateX(-100%); } 100% { transform: translateX(350%); } }
 @media (max-width: 800px) { .topbar { padding: 0 20px; gap: 20px; } .topnav { display: none; } .page-wrap { padding: 38px 20px 25px; } .page-heading { gap: 20px; margin-bottom: 35px; } .workspace { grid-template-columns: 1fr; } .waiting-card { min-height: 340px; } .page-footer { gap: 12px; align-items: flex-start; flex-direction: column; } }
 @media (max-width: 500px) { .quiet-button { display: none; } .brief-card, .review-card { padding-left: 18px; padding-right: 18px; } .track-stats { grid-template-columns: repeat(3, 1fr); } .track-bar { grid-column: 1 / -1; } .decision-actions { flex-direction: column; } }
