@@ -26,13 +26,13 @@ None — this is the entry point. If `product/` already exists in the current re
    ```
    If that resolves to nothing (the skill was copied rather than symlinked), ask the user where the product-coach repo lives and copy `templates/product` from there.
 
-3. **Fill in the dashboard.** Replace every `{{PLACEHOLDER}}` in `product/README.md` with the interview answers. Leave `{{STRATEGY_ONE_SENTENCE}}` as "*Not yet written — run `/strategy`.*" Replace `{{PROJECT_NAME}}` in `product/01-strategy/strategy-and-okrs.md` too.
+3. **Fill in the dashboard.** Replace every `{{PLACEHOLDER}}` in `product/README.md` with the interview answers. Leave `{{STRATEGY_ONE_SENTENCE}}` as "*Not yet written. Run `/strategy`.*" Then replace `{{PROJECT_NAME}}` everywhere else it appears in the scaffold, not just in one file: `grep -rl "{{PROJECT_NAME}}" product/`. Leave every other `{{...}}` alone, because those belong to the coach that writes that artifact.
 
 4. **Report and route.** Show the created tree and tell the user their next step is `/strategy` — nothing else in the stack unlocks until the strategy exists.
 
 ## Output contract
 
-- Writes: `product/README.md` (filled dashboard), `product/01-strategy/strategy-and-okrs.md` (template), placeholder dirs `02-roadmap/` … `07-growth/`.
+- Writes: `product/README.md` (filled dashboard) and the project name into every template that carries it. Copies the rest of the scaffold unchanged, so each coach finds its own artifact waiting with its own prompts intact.
 - Never overwrites existing user content.
 
 ## The operating principle you enforce
