@@ -1,4 +1,4 @@
-# Build log — what actually works
+# Build log: what actually works
 
 An honest record of the app's state, so the README never overclaims. The
 coaches in `skills/` are complete and in daily use; this file is about the app.
@@ -12,10 +12,10 @@ coaches in `skills/` are complete and in daily use; this file is about the app.
   team's own words, expected and actual lifts in percentage points, and read
   dates. Outcomes were assigned from a rule that is documented in the file and
   never placed in a prompt.
-- **`experimentsAsOf(date)`** — the as-of filter the backtest depends on. A
+- **`experimentsAsOf(date)`** is the as-of filter the backtest depends on. A
   backtest that lets the coach see experiments that read out after the brief
   under review is not measuring anything.
-- **`node scripts/check-corpus.mjs`** — recomputes the separation the corpus
+- **`node scripts/check-corpus.mjs`** recomputes the separation the corpus
   claims, so the numbers in the header comment are checked rather than trusted.
 
 ## Not built yet
@@ -30,7 +30,7 @@ coaches in `skills/` are complete and in daily use; this file is about the app.
 
 ## Deliberately not built
 
-**Act three — the coach proposing experiments on its own.** A track record is
+**Act three, the coach proposing experiments on its own.** A track record is
 what earns the right to propose. Building the proposal loop before the
 scoreboard has anything in it would invert the argument the product rests on,
 so the UI will show it as locked with the reason on screen rather than shipping

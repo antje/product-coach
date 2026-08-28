@@ -54,4 +54,4 @@ console.log(`separation on the early funnel: ${f(mean(lifts(frictionEarly)) - me
 
 // Chronological ordering is what the backtest's as-of guard relies on.
 const outOfOrder = rows.filter((r, i) => i > 0 && r.readDate < rows[i - 1].readDate)
-console.log(`\nreadDate monotonically increasing: ${outOfOrder.length === 0 ? 'yes' : 'NO — ' + outOfOrder.map((r) => r.id).join(', ')}`)
+console.log(`\nreadDate monotonically increasing: ${outOfOrder.length === 0 ? 'yes' : 'NO: ' + outOfOrder.map((r) => r.id).join(', ')}`)

@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'product-coach — pressure-test your experiments',
+  title: 'product-coach: pressure-test your experiments',
   description: 'An AI experiment coach grounded in your team\'s history.',
   generator: 'v0.app',
   icons: {

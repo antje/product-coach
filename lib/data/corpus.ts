@@ -6,25 +6,26 @@ import type { Experiment } from '@/lib/types'
  * Jan 2024 to Aug 2026.
  *
  * ---------------------------------------------------------------------------
- * HOW THIS CORPUS WAS BUILT — and why the rule is written down here
+ * HOW THIS CORPUS WAS BUILT, and why the rule is written down here
  * ---------------------------------------------------------------------------
  * Outcomes were assigned from a rule the coach never sees. The rule is stated
  * openly in this file so the evaluation is reviewable, but it is never placed
  * in a prompt, never passed to the model, and never stored on an Experiment.
- * The coach gets only the fields below — the same fields a real analytics
- * export would carry — and has to find the pattern itself.
+ * The coach gets only the fields below, the same fields a real analytics
+ * export would carry, and has to find the pattern itself.
  *
  * The rule:
  *
- *   EARLY FUNNEL — activation for new workspaces, and trial conversion.
- *   Mechanisms that work on how a user *feels* — personalization, social-proof,
- *   urgency, incentive — land flat or negative. Mechanisms that remove work
- *   between the user and their own data — reduce-steps, time-to-value,
- *   defaults — land solidly positive.
+ *   EARLY FUNNEL, meaning activation for new workspaces and trial conversion.
+ *   Mechanisms that work on how a user *feels* (personalization, social-proof,
+ *   urgency, incentive) land flat or negative. Mechanisms that remove work
+ *   between the user and their own data (reduce-steps, time-to-value,
+ *   defaults) land solidly positive.
  *
- *   ESTABLISHED ACCOUNTS — retention, renewal, expansion, reactivation. The
- *   same feeling-led mechanisms work fine: personalized digests lift
- *   reactivation, renewal urgency lifts renewals, referral credit lifts invites.
+ *   ESTABLISHED ACCOUNTS, meaning retention, renewal, expansion and
+ *   reactivation. The same feeling-led mechanisms work fine here: personalized
+ *   digests lift reactivation, renewal urgency lifts renewals, referral credit
+ *   lifts invites.
  *
  *   education / notification / pricing-display are noise, mixed both ways.
  *

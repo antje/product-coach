@@ -1,4 +1,4 @@
-# Roadmap — what's shipped and what's next
+# Roadmap: what is shipped and what is next
 
 product-coach grows one coach at a time. This file tracks what each coach covers and what's queued.
 
@@ -45,11 +45,11 @@ Frameworks behind the growth chain: `growth-hypothesis.md`, `activation-and-habi
 
 Gating: bet → activation → mechanic. `/signal-read` has no gate (diagnosis runs anytime) and feeds `/experiment-brief` (baselines) and `/monetize` (stage evidence). `/monetize` routes its financial model to `/business-case`, which is where the two chains meet.
 
-Design note: `/roadmap-review`, `/exec-narrative` and `/stakeholder-map` were planned as separate coaches and merged into `/prioritize` and `/influence` instead — each pair shares a stage gate and the same inputs, and splitting them would have meant re-reading the same artifacts twice.
+Design note: `/roadmap-review`, `/exec-narrative` and `/stakeholder-map` were planned as separate coaches and merged into `/prioritize` and `/influence` instead. Each pair shares a stage gate and the same inputs, so splitting them would have meant re-reading the same artifacts twice.
 
 ## Queued
 
-- `/jtbd` — Jobs-to-be-Done interviewer and synthesizer. The lens is already used inside `/strategy`; this would make it a coach of its own.
-- `/product-status` — dashboard health check: stale artifacts, unfilled gates, OKR progress.
-- `/board-review` — full-portfolio pressure test across every `product/` artifact, simulating a board meeting.
-- `/decision` — two-way/one-way door protocol for a single decision under ambiguity (framework already in `frameworks/playing-to-win.md`).
+- `/jtbd`. Jobs-to-be-Done interviewer and synthesizer. The lens is already used inside `/strategy`. This would make it a coach of its own.
+- `/product-status`. Dashboard health check: stale artifacts, unfilled gates, OKR progress.
+- `/board-review`. Full-portfolio pressure test across every `product/` artifact, simulating a board meeting.
+- `/decision`. Two-way and one-way door protocol for a single decision under ambiguity. The framework is already in `frameworks/playing-to-win.md`.

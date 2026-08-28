@@ -2,18 +2,18 @@
 
 **A review layer for product decisions.**
 
-Engineering teams review each other's code before it ships. Product teams do not review each other's decisions. A brief can rest on an assumption nobody tested; a roadmap can repeat a bet the team already lost. The cost shows up two quarters later.
+Engineering teams review each other's code before it ships. Product teams do not review each other's decisions. A brief can rest on an assumption nobody tested. A roadmap can repeat a bet the team already lost. The cost shows up two quarters later.
 
-product-coach argues with a decision using the team's own numbers — and then records whether its own objection turned out to be right.
+product-coach argues with a decision using the team's own numbers. Then it records whether its own objection turned out to be right.
 
-It has two surfaces, and the split is the design:
+It has two surfaces, and the split between them is the design:
 
 | | What it does | Where it runs |
 | --- | --- | --- |
 | **The coaches** | Interview you, apply a framework by name, refuse the soft answer, and leave a written artifact in your repo. | Claude Code skills, in your own repo. Free. |
 | **The scoreboard** | Watches for the check date, keeps the ledger of calls, and delivers a verdict on its own advice. | A web app. |
 
-A skill can object. It cannot verify — that needs a durable record checked against a real outcome at a later date. So the coaching is free and the scorekeeping is the product.
+A skill can object. It cannot verify. Verifying needs a durable record, checked against a real outcome at a later date. So the coaching is free and the scorekeeping is the product.
 
 ## The coaches
 
@@ -21,9 +21,9 @@ A skill can object. It cannot verify — that needs a durable record checked aga
 cd /path/to/product-coach && bash setup
 ```
 
-`setup` symlinks each skill into `~/.claude/skills/`, so the source of truth stays here and every skill updates with zero drift. Adding a coach is adding a directory under `skills/` — nothing else to register. Re-run `setup` afterwards.
+`setup` symlinks each skill into `~/.claude/skills/`. The source of truth stays here, so every skill updates with zero drift. Adding a coach means adding a directory under `skills/` and re-running `setup`. There is nothing else to register.
 
-**New here? Read [docs/using-the-skills.md](docs/using-the-skills.md)** — the skills are coaches, not report generators: bring a real product challenge with real numbers, expect to be interviewed, expect pushback, and get a written artifact in your repo's `product/` directory at the end. The guide has a which-coach-for-which-situation table and a worked end-to-end example.
+**New here? Read [docs/using-the-skills.md](docs/using-the-skills.md).** The skills are coaches, not report generators. Bring a real product challenge with real numbers, expect to be interviewed, expect pushback, and get a written artifact in your repo's `product/` directory at the end. The guide has a table of which coach to use when, and a worked example from end to end.
 
 ## The app
 
@@ -31,9 +31,9 @@ cd /path/to/product-coach && bash setup
 pnpm install && pnpm dev
 ```
 
-Next.js at the repo root, so the project imports to v0 and deploys from Vercel unchanged. Copy `.env.example` to `.env` and fill in the keys before running a review.
+Next.js sits at the repo root, so the project imports to v0 and deploys from Vercel unchanged. Copy `.env.example` to `.env` and fill in the keys before running a review.
 
-**Status: in progress.** The review screen and the experiment history are in place; the objection engine, the ledger, and the backtest are being built. See [docs/build-log.md](docs/build-log.md) for what works today.
+**Status: in progress.** The review screen and the experiment history are in place. The objection engine, the ledger, and the backtest are still being built. See [docs/build-log.md](docs/build-log.md) for what works today.
 
 ## The skills
 
@@ -84,36 +84,40 @@ Each skill names something it refuses to do, because the refusal is what makes i
    hypothesis +     session +         scorecard              model + bet +
    loop + bet       health metrics                           validation
         ↘                ↘                                  ↗
-          /signal-read (no gate — evidence for everything)
+          /signal-read (no gate, evidence for everything)
                          ↘
                            /experiment-brief (tests the bet)
 ```
 
-Strategy gates OKRs; OKRs gate the roadmap; the roadmap gates the build. On the growth side: the bet gates activation, activation gates the mechanic, and signals gate pricing — `/monetize` will not price a funnel whose stage nobody has diagnosed. Each skill checks its gate and routes you backward if the prerequisite artifact doesn't exist. All skills read/write the same `product/` directory in *your* repo — that's the shared memory. The two chains meet twice: `/experiment-brief` tests what `/strategy` and `/growth-bet` claim, and `/monetize` hands its recommendation to `/business-case` for the financial model.
+Strategy gates OKRs. OKRs gate the roadmap. The roadmap gates the build. On the growth side, the bet gates activation, activation gates the mechanic, and signals gate pricing. `/monetize` will not price a funnel whose stage nobody has diagnosed.
+
+Each skill checks its gate and routes you backward if the prerequisite artifact does not exist. All skills read and write the same `product/` directory in *your* repo. That directory is the shared memory.
+
+The two chains meet twice. `/experiment-brief` tests what `/strategy` and `/growth-bet` claim, and `/monetize` hands its recommendation to `/business-case` for the financial model.
 
 ## Repo layout
 
 ```
-app/          the Next.js app — pages, API routes, the dark design system
+app/          the Next.js app: pages, API routes, the dark design system
 components/   UI components
 lib/          types, the experiment corpus, and the model, coach and ledger code
-skills/       one directory per coach (SKILL.md) — symlinked into ~/.claude/skills/
-frameworks/   distilled framework rules — the editable source of truth skills inline
+skills/       one directory per coach (SKILL.md), symlinked into ~/.claude/skills/
+frameworks/   distilled framework rules, the editable source the skills inline
 templates/    the product/ scaffold that /product-init copies into target repos
 scripts/      repo checks, run with node
-docs/         using-the-skills.md — the user guide · roadmap.md — what's shipped and next
+docs/         using-the-skills.md is the user guide, roadmap.md is what's next
 ```
 
-**Two conventions hold this together.**
+Two conventions hold this together.
 
-*Skills are self-contained.* Framework rules are inlined so a skill works standalone once symlinked; `frameworks/` is where the rules get edited, then re-inlined. Every skill declares a persona, what it refuses to do, a stage gate, and an input/output contract on `product/` files.
+**Skills are self-contained.** Framework rules are inlined so a skill works standalone once symlinked. `frameworks/` is where the rules get edited, then re-inlined. Every skill declares a persona, what it refuses to do, a stage gate, and an input and output contract on `product/` files.
 
-*The UI layer is regenerable; the rest is not.* `app/**/page.tsx`, `components/`, and `globals.css` are presentation and can be regenerated wholesale. Everything under `lib/`, `scripts/`, and `app/api/` is hand-owned. Pages never inline a fetch or a prompt — they call typed functions from `lib/`. So a screen can be redrawn from scratch without touching a contract.
+**The UI layer is regenerable and the rest is not.** `app/**/page.tsx`, `components/`, and `globals.css` are presentation. They can be regenerated wholesale. Everything under `lib/`, `scripts/`, and `app/api/` is written by hand. Pages never inline a fetch or a prompt. They call typed functions from `lib/`. That way a screen can be redrawn from scratch without breaking a contract.
 
 ## How it grows
 
-Adding a coach touches nothing but its own directory: rules distilled into `frameworks/`, a coach built on top in `skills/`, and any new deliverable format added to `templates/product/`. `setup` and the plugin manifest both discover `skills/*/` by scanning, so there is no registry to update. See [docs/roadmap.md](docs/roadmap.md) for what's shipped and what's queued.
+Adding a coach touches nothing but its own directory. Distill the rules into `frameworks/`, build the coach on top in `skills/`, and add any new deliverable format to `templates/product/`. Both `setup` and the plugin manifest find skills by scanning `skills/*/`, so there is no registry to update. See [docs/roadmap.md](docs/roadmap.md) for what is shipped and what is queued.
 
 ## Status
 
-Fifteen coaches across three chains: strategy, execution, and growth. The app is early — see [docs/build-log.md](docs/build-log.md).
+Fifteen coaches across three chains: strategy, execution, and growth. The app is early. See [docs/build-log.md](docs/build-log.md).

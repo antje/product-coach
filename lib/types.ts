@@ -62,6 +62,10 @@ export interface Brief {
   expectedLiftPp: number
   testType: string
   splitDescription: string
+  /** Users entering the test per week. Without it there is no power arithmetic. */
+  weeklyVolume: number
+  /** How long the team intends to run. Compared against what the power math needs. */
+  plannedWeeks: number
   /** Absent is the point: the preflight refuses a brief without one. */
   readDate: string | null
   /** Each needs a numeric boundary, not a direction. */

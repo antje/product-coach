@@ -1,11 +1,11 @@
-# Using the skills — a coaching staff for real product challenges
+# Using the skills: a coaching staff for real product challenges
 
 The skills are not report generators. Each one is a **coach**: it takes a real challenge from a real product, interviews you for the facts it needs, applies the frameworks by name, pushes back where the thinking is soft, and leaves a written artifact behind in your repo. You bring the product and the honesty; the coach brings the method.
 
 ## Getting started
 
 1. Install once: run `bash setup` from the product-coach repo. Every skill is then available in any Claude Code session as `/skill-name`.
-2. In the repo of the product you're working on, start with `/product-init`. It scaffolds a `product/` directory — that directory is the shared memory all coaches read and write, so your strategy, bets, and experiment results accumulate in one place instead of in chat scrollback.
+2. In the repo of the product you're working on, start with `/product-init`. It scaffolds a `product/` directory. That directory is the shared memory all coaches read and write, so your strategy, bets, and experiment results accumulate in one place instead of in chat scrollback.
 3. Invoke a coach with a real situation, not an abstract question. "Our trial conversion has been flat at 2% for a year and marketing wants more ad budget" gets you a diagnosis; "tell me about growth loops" gets you a lecture you could have read anywhere.
 
 ## What a session with a coach looks like
@@ -13,7 +13,7 @@ The skills are not report generators. Each one is a **coach**: it takes a real c
 Take `/growth-bet` as the example; they all follow the same shape:
 
 1. **It asks before it advises.** Expect questions: which numbers refuse to move, over what period, what already got tried. Have data handy (exports, dashboard numbers with time ranges). A coach given no data will ask for it rather than invent it.
-2. **It applies the framework by name.** The constraint diagnosis, the IF/THEN/BECAUSE/MEASURED BY hypothesis, the loop selection — you'll see the framework working on your own product, named as it goes.
+2. **It applies the framework by name.** The constraint diagnosis, the IF/THEN/BECAUSE/MEASURED BY hypothesis, the loop selection. You will see the framework working on your own product, named as it goes.
 3. **It refuses things.** Every coach has a refusal (listed in the README table) and it is the point: `/experiment-brief` will not give you a brief without a read date; `/monetize` will not price a funnel that never delivered value. When a skill pushes back, that is the method doing its job.
 4. **It writes the artifact.** Each session ends in a file under `product/07-growth/` (or `01-strategy/` etc. for the leadership chain). The artifact is the deliverable; the conversation was the working session.
 
@@ -36,14 +36,14 @@ Take `/growth-bet` as the example; they all follow the same shape:
 
 ## The two chains
 
-Run in order when building from scratch; jump in anywhere when you have a specific problem — each skill checks for the artifacts it needs and routes you backward if one is missing (that's the stage gate doing its job, not bureaucracy).
+Run them in order when building from scratch. Jump in anywhere when you have a specific problem. Each skill checks for the artifacts it needs and routes you backward if one is missing. That is the stage gate doing its job, not bureaucracy.
 
 - **Strategy chain:** `/product-init` → `/strategy` → `/okr-review` → `/pressure-test`, then `/prioritize` for the roadmap.
 - **Growth chain:** `/growth-bet` → `/activation` → `/engagement-mechanic` → `/monetize`, with `/signal-read` feeding evidence to all of them and `/experiment-brief` testing the bet.
 
 Two useful exceptions to the ordering:
 
-- `/signal-read` has **no gate**. Run it first, run it often — it's the coach the others send you to for evidence, and the one to call before any number goes into any deliverable.
+- `/signal-read` has **no gate**. Run it first, run it often. It is the coach the others send you to for evidence, and the one to call before any number goes into any deliverable.
 - `/pressure-test` works on anything written. Finish an artifact, then let the skeptic at it before you present it.
 
 The chains meet twice: `/experiment-brief` tests what `/strategy` and `/growth-bet` claim, and `/monetize` hands its pricing recommendation to `/business-case` for the financial model.
