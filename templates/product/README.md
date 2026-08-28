@@ -1,12 +1,12 @@
-# {{PROJECT_NAME}} — Product Dashboard
+# {{PROJECT_NAME}} Product Dashboard
 
 > {{ONE_LINE_DESCRIPTION}}
 > Model: {{B2B_OR_B2C}} · Stage: {{STAGE}} · Owner: {{OWNER}}
-> Managed with product-coach — this project is treated as a product.
+> Managed with product-coach. This project is treated as a product.
 
 ## The strategy in one sentence
 
-{{STRATEGY_ONE_SENTENCE — filled in after /strategy}}
+{{STRATEGY_ONE_SENTENCE, filled in after /strategy}}
 
 ## Artifacts at a glance
 

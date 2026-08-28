@@ -1,10 +1,10 @@
-# Growth Bet — {{PROJECT_NAME}}
+# Growth Bet: {{PROJECT_NAME}}
 
 > Written by `/growth-bet`. Gates `/activation` and `/experiment-brief`.
 
 ## The constraint
 
-{{WHICH_LEVER — acquisition / activation / habit / monetization — and the evidence: the numbers that refuse to move, with time ranges}}
+{{WHICH_LEVER: acquisition / activation / habit / monetization. Plus the evidence: the numbers that refuse to move, with time ranges}}
 
 ## The hypothesis
 

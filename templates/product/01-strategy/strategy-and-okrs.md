@@ -1,4 +1,4 @@
-# Product Strategy One-Pager & OKRs — {{PROJECT_NAME}}
+# Product Strategy One-Pager & OKRs: {{PROJECT_NAME}}
 
 > Produced with `/strategy` and `/okr-review`; stress-tested with `/pressure-test`.
 
@@ -13,10 +13,10 @@
 ## Playing to Win cascade
 
 ### Winning aspiration
-_What does success look like for the specific person you serve — in their terms, not internal metrics?_
+_What does success look like for the specific person you serve, in their terms rather than internal metrics?_
 
 ### Where to play
-_Segment, geography, channel, use case — explicitly, including who you will NOT serve._
+_Segment, geography, channel, use case, explicitly, including who you will NOT serve._
 
 ### How to win
 _Your differentiator: what can you do that your specific competitors cannot easily replicate?_
@@ -43,4 +43,4 @@ We will not ___ because ___.
 
 ## Pressure-test log
 
-_Appended by `/pressure-test` — date, most valid challenge, what changed, what was defended._
+_Appended by `/pressure-test`: date, most valid challenge, what changed, what was defended._
