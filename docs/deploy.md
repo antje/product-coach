@@ -4,6 +4,12 @@ The repo connects to Vercel directly through GitHub. There is no v0 in the
 loop. Every push to `main` becomes a production deployment, and every pull
 request gets its own preview URL, with no extra configuration.
 
+> **Before putting a live key on a reachable deployment.** `/api/review` has no
+> rate limit and no spend ceiling yet. `DEMO_REVIEWS_PER_SESSION` and
+> `DEMO_DAILY_COST_CEILING_USD` are named in `.env.example` but nothing reads
+> them. Until that code exists, either keep the deployment behind Deployment
+> Protection, or use a key from a spend-capped Anthropic workspace, or both.
+
 ## Why not v0
 
 v0 is worth keeping when you want its UI generation and live preview, or its
@@ -20,17 +26,38 @@ Two of these steps need access to the Vercel account, so they are done by hand.
    directory as the repo root, because that is where the app lives.
 
 2. **Add the environment variables** under Settings, then Environment
-   Variables. Add each one to Production, Preview and Development:
+   Variables. Scope matters, so set them per environment rather than ticking
+   all three boxes:
 
-   | Variable | Needed for |
-   | --- | --- |
-   | `ANTHROPIC_API_KEY` | Running a review. Without it the app loads but every review returns a 503. |
-   | `DATABASE_URL` | The ledger. Not needed until that lands. |
-   | `WEBHOOK_SIGNING_SECRET` | Verifying experiment-result webhooks. Not needed yet. |
+   | Variable | Production | Preview | Development |
+   | --- | --- | --- | --- |
+   | `ANTHROPIC_API_KEY` | yes | leave unset, or a separate spend-capped key | leave unset |
+   | `DATABASE_URL` | yes, when the ledger lands | a separate database, never production | leave unset |
+   | `WEBHOOK_SIGNING_SECRET` | yes, when webhooks land | a different value | leave unset |
 
    `.env.example` lists the same set with notes.
 
-3. **Confirm it took.** Open `/api/health` on the deployed URL. It reports
+   **Why not all three.** Every branch and pull request gets its own preview
+   deployment, and those URLs are reachable by anyone holding the link unless
+   Deployment Protection is on. A production key sitting in Preview means an
+   unlisted URL can spend real money. The Development scope exists so
+   `vercel env pull` can write values into `.env.local`; skip it and keep the
+   key in your own `.env`, which is already gitignored, so it lives on one
+   fewer machine.
+
+   With no key set, the app still builds and loads. Reviews return 503 and say
+   why. That is the correct behaviour for a preview.
+
+   If you do want live reviews in previews, make a second key in the Anthropic
+   Console under its own workspace with a spend limit, and use that one. Then a
+   leaked preview URL costs a capped amount and can be revoked without touching
+   production.
+
+3. **Turn on Deployment Protection** under Settings, then Deployment
+   Protection, so preview URLs require a login. Worth doing whether or not a
+   key is set, because previews of this app show a real experiment history.
+
+4. **Confirm it took.** Open `/api/health` on the deployed URL. It reports
    which variables are present, how many experiments loaded, and the commit
    that is live. It never returns a value, only whether one is set.
 
