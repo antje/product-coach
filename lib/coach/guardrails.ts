@@ -35,20 +35,30 @@ export type GuardrailVerdict =
   | { allowed: true; sessionId: string }
   | { allowed: false; reason: string; retryable: boolean }
 
-export async function checkGuardrails(): Promise<GuardrailVerdict> {
+/**
+ * The visitor's session id, creating one if this is their first request.
+ *
+ * Separate from checkGuardrails because reading the ledger needs to know whose
+ * calls to show without consuming a rate-limit slot.
+ */
+export async function getSession(): Promise<string> {
   const store = await cookies()
-  let sessionId = store.get(SESSION_COOKIE)?.value
+  const existing = store.get(SESSION_COOKIE)?.value
+  if (existing) return existing
 
-  if (!sessionId) {
-    sessionId = crypto.randomUUID()
-    store.set(SESSION_COOKIE, sessionId, {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 60 * 24,
-      path: '/',
-    })
-  }
+  const fresh = crypto.randomUUID()
+  store.set(SESSION_COOKIE, fresh, {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 60 * 60 * 24,
+    path: '/',
+  })
+  return fresh
+}
+
+export async function checkGuardrails(): Promise<GuardrailVerdict> {
+  const sessionId = await getSession()
 
   const dailyCeiling = limitFromEnv('DEMO_DAILY_COST_CEILING_USD')
   if (dailyCeiling != null) {

@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import type { Brief, Experiment } from '@/lib/types'
+import type { Experiment, ReviewSubject } from '@/lib/types'
 
 /**
  * The objection prompt.
@@ -12,7 +12,7 @@ import type { Brief, Experiment } from '@/lib/types'
  * Bump on any change to SYSTEM_RULES or the schema. Wording-only changes to
  * the corpus rendering still count, because they change what the model sees.
  */
-export const PROMPT_VERSION = 'objection/2026-08-27.1'
+export const PROMPT_VERSION = 'objection/2026-08-28.1'
 
 export const ObjectionTypeEnum = z.enum([
   'assumed-causation',
@@ -122,17 +122,34 @@ export function systemBlocks(experiments: Experiment[]) {
   ]
 }
 
-export function userMessage(brief: Brief): string {
-  return `Review this brief.
+/**
+ * Takes a ReviewSubject rather than a Brief, so a historical experiment can be
+ * reviewed on the same path. Optional lines are omitted rather than filled with
+ * a placeholder, because a fabricated "50/50 split" in the prompt is a fact the
+ * model would reason from as though it were true.
+ */
+export function userMessage(subject: ReviewSubject): string {
+  const lines = [
+    'Review this experiment.',
+    '',
+    `Title: ${subject.title}`,
+    `Hypothesis: ${subject.hypothesis}`,
+    `Mechanism: ${subject.mechanism}`,
+    `Audience: ${subject.audience}`,
+    subject.metricDefinition
+      ? `Primary metric: ${subject.primaryMetric} (${subject.metricDefinition})`
+      : `Primary metric: ${subject.primaryMetric}`,
+    `Baseline: ${subject.baselinePp}pp`,
+    `Expected lift: ${fmt(subject.expectedLiftPp)}pp`,
+  ]
 
-Title: ${brief.title}
-Hypothesis: ${brief.hypothesis}
-Mechanism: ${brief.mechanism}
-Audience: ${brief.audience}
-Primary metric: ${brief.primaryMetric} (${brief.metricDefinition})
-Baseline: ${brief.baselinePp}pp
-Expected lift: ${fmt(brief.expectedLiftPp)}pp
-Test: ${brief.testType}, ${brief.splitDescription}, ${brief.plannedWeeks} weeks at ~${brief.weeklyVolume.toLocaleString()} users/week`
+  if (subject.testType && subject.plannedWeeks != null && subject.weeklyVolume != null) {
+    lines.push(
+      `Test: ${subject.testType}, ${subject.splitDescription ?? 'even split'}, ${subject.plannedWeeks} weeks at ~${subject.weeklyVolume.toLocaleString()} users/week`
+    )
+  }
+
+  return lines.join('\n')
 }
 
 function fmt(n: number): string {

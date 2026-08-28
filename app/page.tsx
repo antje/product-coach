@@ -1,11 +1,13 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { CircleHelp, FlaskConical, History, MoreHorizontal, Sparkles } from 'lucide-react'
+import { MoreHorizontal, Sparkles } from 'lucide-react'
 import { BriefEditor } from '@/components/brief-editor'
+import { SiteNav } from '@/components/site-nav'
 import { CoachPanel } from '@/components/coach-panel'
 import { requestReview } from '@/lib/client/review'
 import type { ReviewResult } from '@/lib/coach/review'
+import { EXPERIMENTS } from '@/lib/data/corpus'
 import { DRAFT_BRIEF } from '@/lib/data/draft-brief'
 import type { Brief, TeamResponse } from '@/lib/types'
 
@@ -56,29 +58,7 @@ export default function Page() {
 
   return (
     <main className="app-shell">
-      <header className="topbar">
-        <div className="brand-lockup">
-          <div className="brand-mark">
-            <FlaskConical size={17} strokeWidth={2.2} />
-          </div>
-          <span>product-coach</span>
-          <span className="beta-pill">BETA</span>
-        </div>
-        <nav className="topnav" aria-label="Main navigation">
-          <a className="active" href="#brief">
-            Review
-          </a>
-          <a href="#history">
-            <History size={14} /> Team history
-          </a>
-        </nav>
-        <div className="top-actions">
-          <button className="icon-button" aria-label="Help" type="button">
-            <CircleHelp size={17} />
-          </button>
-          <div className="avatar">JS</div>
-        </div>
-      </header>
+      <SiteNav />
 
       <div className="page-wrap">
         <section className="page-heading">
@@ -105,7 +85,7 @@ export default function Page() {
             <BriefEditor brief={brief} onChange={updateBrief} disabled={status === 'reviewing'} />
             <div className="brief-note">
               <Sparkles size={15} />{' '}
-              <span>Reviewed against two and a half years of your team&apos;s experiments.</span>
+              <span>Reviewed against {EXPERIMENTS.length} of your team&apos;s finished experiments.</span>
             </div>
           </section>
 
@@ -130,7 +110,7 @@ export default function Page() {
         <footer className="page-footer">
           <span>product-coach learns from your team&apos;s experiments, not the internet.</span>
           <span>
-            50 experiments indexed <span className="sync-dot" />
+            {EXPERIMENTS.length} experiments indexed <span className="sync-dot" />
           </span>
         </footer>
       </div>

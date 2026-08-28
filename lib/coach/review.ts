@@ -8,7 +8,7 @@ import {
 } from '@/lib/ai/prompts/objection'
 import { MODEL_FOR_TASK } from '@/lib/ai/router'
 import { experimentsAsOf } from '@/lib/data/corpus'
-import type { Brief, Objection } from '@/lib/types'
+import { briefToSubject, type Brief, type Objection, type ReviewSubject } from '@/lib/types'
 import { preflight, type PreflightIssue } from './preflight'
 
 export type ReviewResult =
@@ -25,38 +25,43 @@ export class ReviewError extends Error {
   }
 }
 
-export interface ReviewOptions {
+export interface ObjectionOptions {
   /**
-   * Only experiments that read out before this date are shown to the coach.
-   * Live reviews pass today. The backtest passes the date of the brief under
-   * review, which is the whole reason this parameter exists: a backtest that
-   * lets the coach see the future is not measuring anything.
+   * Only experiments that read out strictly before this date are shown.
+   *
+   * A live review passes today. A replay passes the read date of the experiment
+   * under review, which is the entire reason this parameter exists: a coach
+   * that can see what happened after the decision is not being tested, it is
+   * being handed the answer.
    */
-  asOf?: string
+  asOf: string
+  /** Used for the check date on the resulting objection. */
+  checkDate: string
+  subjectId: string
 }
 
-export async function reviewBrief(brief: Brief, options: ReviewOptions = {}): Promise<ReviewResult> {
-  const checks = preflight(brief)
-  if (!checks.ok) {
-    return { kind: 'preflight-refused', issues: checks.issues }
-  }
-
-  const asOf = options.asOf ?? todayIso()
-  const history = experimentsAsOf(asOf)
+/**
+ * The shared path. Both a drafted brief and a replayed experiment arrive here,
+ * which is what keeps the two from drifting into two different coaches.
+ */
+export async function formObjection(
+  subject: ReviewSubject,
+  options: ObjectionOptions
+): Promise<Exclude<ReviewResult, { kind: 'preflight-refused' }>> {
+  const history = experimentsAsOf(options.asOf)
   const known = new Set(history.map((e) => e.id))
 
   const { data, usage } = await generateStructured<ObjectionOutput>({
     task: 'objection',
     system: systemBlocks(history),
-    user: userMessage(brief),
+    user: userMessage(subject),
     schema: ObjectionOutputSchema,
     promptVersion: PROMPT_VERSION,
   })
 
   // A cited id that does not resolve is this product's specific hallucination
-  // mode. Drop those rather than showing the reader a citation they cannot
-  // check, and report what was dropped so the rate can be measured instead of
-  // quietly absorbed.
+  // mode. Drop those rather than showing a citation nobody can check, and
+  // report what was dropped so the rate can be measured instead of absorbed.
   const cited = data.citedExperimentIds.filter((id) => known.has(id))
   const droppedCitations = data.citedExperimentIds.filter((id) => !known.has(id))
 
@@ -65,7 +70,7 @@ export async function reviewBrief(brief: Brief, options: ReviewOptions = {}): Pr
       kind: 'declined',
       reason:
         data.declineReason ??
-        'The history has nothing closely comparable to this brief, so there is no evidence to object with.',
+        'The history has nothing closely comparable to this experiment, so there is no evidence to object with.',
       usage,
       droppedCitations,
     }
@@ -84,19 +89,17 @@ export async function reviewBrief(brief: Brief, options: ReviewOptions = {}): Pr
 
   const objection: Objection = {
     id: crypto.randomUUID(),
-    briefId: brief.id,
+    briefId: options.subjectId,
     createdAt: new Date().toISOString(),
     claim: data.claim,
     reasoning: data.reasoning ?? '',
     citedExperimentIds: cited,
     expectedEffect: {
-      metric: brief.primaryMetric,
+      metric: subject.primaryMetric,
       direction: data.expectedEffectDirection,
       thresholdPp: data.expectedEffectThresholdPp,
     },
-    // The date we find out is the brief's read date, not something the model
-    // gets to invent. Preflight has already guaranteed it is set.
-    checkDate: brief.readDate!,
+    checkDate: options.checkDate,
     confidence: data.confidence,
     objectionType: data.objectionType,
     sharpenedHypothesis: data.sharpenedHypothesis,
@@ -107,6 +110,21 @@ export async function reviewBrief(brief: Brief, options: ReviewOptions = {}): Pr
   return { kind: 'objection', objection, usage, droppedCitations }
 }
 
-function todayIso(): string {
+/** A brief someone is drafting. Preflight first, because it is free. */
+export async function reviewBrief(brief: Brief): Promise<ReviewResult> {
+  const checks = preflight(brief)
+  if (!checks.ok) {
+    return { kind: 'preflight-refused', issues: checks.issues }
+  }
+
+  return formObjection(briefToSubject(brief), {
+    asOf: todayIso(),
+    // Preflight has already guaranteed a read date is set.
+    checkDate: brief.readDate!,
+    subjectId: brief.id,
+  })
+}
+
+export function todayIso(): string {
   return new Date().toISOString().slice(0, 10)
 }

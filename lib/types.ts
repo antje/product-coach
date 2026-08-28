@@ -82,6 +82,59 @@ export interface Guardrail {
   rawText: string
 }
 
+/**
+ * What the coach is actually shown when it forms an objection.
+ *
+ * Narrower than a Brief on purpose. A Brief has 17 fields and an Experiment has
+ * 12, and replay would otherwise have to invent the 8 that a historical row
+ * does not carry. This is the intersection that both can satisfy honestly, so
+ * the prompt takes it and neither path fabricates anything.
+ */
+export interface ReviewSubject {
+  title: string
+  hypothesis: string
+  mechanism: Mechanism
+  audience: Audience
+  primaryMetric: string
+  baselinePp: number
+  expectedLiftPp: number
+  /** Present on a drafted brief, absent on a historical experiment. */
+  metricDefinition?: string
+  testType?: string
+  splitDescription?: string
+  plannedWeeks?: number
+  weeklyVolume?: number
+}
+
+export function briefToSubject(brief: Brief): ReviewSubject {
+  return {
+    title: brief.title,
+    hypothesis: brief.hypothesis,
+    mechanism: brief.mechanism,
+    audience: brief.audience,
+    primaryMetric: brief.primaryMetric,
+    baselinePp: brief.baselinePp,
+    expectedLiftPp: brief.expectedLiftPp,
+    metricDefinition: brief.metricDefinition,
+    testType: brief.testType,
+    splitDescription: brief.splitDescription,
+    plannedWeeks: brief.plannedWeeks,
+    weeklyVolume: brief.weeklyVolume,
+  }
+}
+
+export function experimentToSubject(experiment: Experiment): ReviewSubject {
+  return {
+    title: experiment.name,
+    hypothesis: experiment.hypothesis,
+    mechanism: experiment.mechanism,
+    audience: experiment.audience,
+    primaryMetric: experiment.primaryMetric,
+    baselinePp: experiment.baselinePp,
+    expectedLiftPp: experiment.expectedLiftPp,
+  }
+}
+
 /** What kind of claim an objection is making. The track record is sliced by this. */
 export type ObjectionType =
   | 'assumed-causation'
@@ -123,8 +176,16 @@ export interface Objection {
 /** What the team did with an objection. The correction-loop signal. */
 export type TeamResponse = 'accepted' | 'shipped-anyway' | 'dismissed'
 
-/** Whether the coach's call turned out to be right. */
-export type CallOutcome = 'right' | 'wrong' | 'untested'
+/**
+ * Whether the coach's call turned out to be right.
+ *
+ * 'not-scored' is distinct from 'untested' and the distinction matters. Untested
+ * means the outcome has not arrived yet. Not-scored means it has arrived and the
+ * call still cannot be graded, because the coach declined and therefore made no
+ * prediction. Collapsing the two would let a coach improve its hit rate by
+ * staying quiet, which is the exact failure the scoreboard exists to prevent.
+ */
+export type CallOutcome = 'right' | 'wrong' | 'untested' | 'not-scored'
 
 export interface LedgerEntry {
   objection: Objection

@@ -32,6 +32,12 @@ jobs:
       - name: Check the experiment corpus
         run: node scripts/check-corpus.mjs
 
+      # If this fails, every replay and backtest the product has produced is
+      # void, because the coach was shown outcomes from after the decision it
+      # was judging. It is a correctness gate, not a quality one.
+      - name: Check the as-of guard
+        run: node scripts/check-asof.mjs
+
       # Builds without any secrets present, which is deliberate: nothing may
       # read a key at build time, only when a request comes in.
       - name: Build

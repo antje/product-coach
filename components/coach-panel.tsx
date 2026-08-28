@@ -1,8 +1,9 @@
 'use client'
 
 import { ArrowUpRight, Check, Link2, ShieldAlert, Sparkles, X } from 'lucide-react'
+import Link from 'next/link'
 import type { ReviewResult } from '@/lib/coach/review'
-import { experimentById } from '@/lib/data/corpus'
+import { EXPERIMENTS, experimentById } from '@/lib/data/corpus'
 import type { Confidence, TeamResponse } from '@/lib/types'
 
 /**
@@ -75,8 +76,8 @@ export function CoachPanel({
           <Sparkles size={16} /> Review experiment <span className="shortcut">⌘ ↵</span>
         </button>
         <div className="waiting-meta">
-          <span className="pulse" /> Ready to review <span className="meta-divider" /> 50 past experiments
-          indexed
+          <span className="pulse" /> Ready to review <span className="meta-divider" /> {EXPERIMENTS.length} past
+          experiments indexed
         </div>
       </div>
     )
@@ -130,7 +131,7 @@ export function CoachPanel({
           spend your trust on a guess.
         </p>
         <div className="brief-footer">
-          <span>Reviewed against 50 experiments.</span>
+          <span>Reviewed against {EXPERIMENTS.length} experiments.</span>
         </div>
       </div>
     )
@@ -170,9 +171,9 @@ export function CoachPanel({
       </div>
       <div className="evidence-list">
         {cited.map((experiment) => (
-          <a
+          <Link
             className="evidence-row"
-            href={`#${experiment.id}`}
+            href={`/history#${experiment.id}`}
             key={experiment.id}
             title={experiment.hypothesis}
           >
@@ -191,7 +192,7 @@ export function CoachPanel({
               <small>{experiment.primaryMetric}</small>
             </div>
             <ArrowUpRight size={15} className="row-arrow" />
-          </a>
+          </Link>
         ))}
       </div>
 
@@ -219,9 +220,12 @@ export function CoachPanel({
           </div>
           {response && (
             <p className="decision-note">
-              {response === 'accepted'
-                ? 'Recorded. The coach will check this call on the read date either way.'
-                : 'Recorded as an override. That is the more useful outcome for the record, because it is the one that tests the coach.'}
+              {response === 'accepted' ? 'Noted.' : 'Noted as an override.'} This is a live brief, so
+              there is no outcome to check it against yet and nothing has been scored.{' '}
+              <a className="replay-link" href="/history">
+                Replay a finished experiment
+              </a>{' '}
+              to see a call scored end to end.
             </p>
           )}
         </div>
