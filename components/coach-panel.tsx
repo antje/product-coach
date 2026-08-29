@@ -4,7 +4,8 @@ import { ArrowUpRight, Check, Link2, ShieldAlert, Sparkles, X } from 'lucide-rea
 import Link from 'next/link'
 import type { ReviewResult } from '@/lib/coach/review'
 import { EXPERIMENTS, experimentById } from '@/lib/data/corpus'
-import type { Confidence, TeamResponse } from '@/lib/types'
+import { preflight } from '@/lib/coach/preflight'
+import type { Brief, Confidence, TeamResponse } from '@/lib/types'
 
 /**
  * Confidence changes what the coach is allowed to say, not just a badge colour.
@@ -24,6 +25,7 @@ export function CoachPanel({
   result,
   error,
   response,
+  brief,
   onReview,
   onRespond,
 }: {
@@ -31,6 +33,7 @@ export function CoachPanel({
   result: ReviewResult | null
   error: string | null
   response: TeamResponse | null
+  brief: Brief
   onReview: () => void
   onRespond: (r: TeamResponse) => void
 }) {
@@ -65,19 +68,38 @@ export function CoachPanel({
   }
 
   if (status === 'idle' || !result) {
+    // Preflight is pure arithmetic with no model call, so it runs here as you
+    // type. The empty state becomes a checklist instead of a wall, and the
+    // reader learns what this product cares about before spending anything.
+    const checks = preflight(brief)
+    const ready = checks.ok
+
     return (
       <div className="waiting-card">
         <div className="coach-symbol">
           <Sparkles size={22} />
         </div>
-        <h2>Your coach is waiting.</h2>
-        <p>One focused challenge, backed by what your team has already learned. No generic advice.</p>
+        <h2>{ready ? 'Your coach is waiting.' : 'The brief is not ready yet.'}</h2>
+        <p>
+          {ready
+            ? 'One focused challenge, backed by what your team has already learned. No generic advice.'
+            : 'These are checked here, for free, before the coach reads a thing. Nothing is spent until they pass.'}
+        </p>
+
+        {!ready && (
+          <ul className="pre-checklist">
+            {checks.issues.map((issue) => (
+              <li key={issue.code}>{issue.remedy}</li>
+            ))}
+          </ul>
+        )}
+
         <button className="review-button" onClick={onReview} type="button">
           <Sparkles size={16} /> Review experiment <span className="shortcut">⌘ ↵</span>
         </button>
         <div className="waiting-meta">
-          <span className="pulse" /> Ready to review <span className="meta-divider" /> {EXPERIMENTS.length} past
-          experiments indexed
+          <span className="pulse" /> {ready ? 'Ready to review' : `${checks.issues.length} to fix`}{' '}
+          <span className="meta-divider" /> {EXPERIMENTS.length} past experiments indexed
         </div>
       </div>
     )

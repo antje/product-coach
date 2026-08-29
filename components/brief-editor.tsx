@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronDown, FlaskConical, MoreHorizontal, Shield, Target, Users, Zap } from 'lucide-react'
+import { ChevronDown, FlaskConical, Plus, Shield, Target, Trash2, Users, Zap } from 'lucide-react'
 import type { Audience, Brief, Mechanism } from '@/lib/types'
 
 const MECHANISMS: Mechanism[] = [
@@ -36,7 +36,9 @@ export function BriefEditor({
   onChange: (brief: Brief) => void
   disabled: boolean
 }) {
-  const [showDetails, setShowDetails] = useState(false)
+  const [showDetails, setShowDetails] = useState(
+    brief.guardrails.length === 0 || !brief.targetDerivation
+  )
   const set = <K extends keyof Brief>(key: K, value: Brief[K]) => onChange({ ...brief, [key]: value })
 
   return (
@@ -52,9 +54,6 @@ export function BriefEditor({
             aria-label="Experiment title"
           />
         </div>
-        <button className="more-button" aria-label="More brief options" type="button">
-          <MoreHorizontal size={18} />
-        </button>
       </div>
 
       <div className="hypothesis-block">
@@ -204,6 +203,11 @@ export function BriefEditor({
       {showDetails && (
         <div className="details-body">
           <span className="field-label">GUARDRAILS</span>
+          {brief.guardrails.length === 0 && (
+            <p className="edit-hint">
+              No guardrails yet. Name what must not degrade, and give each one a number.
+            </p>
+          )}
           {brief.guardrails.map((g, i) => (
             <div className="guardrail-row" key={i}>
               <input
@@ -232,8 +236,30 @@ export function BriefEditor({
                 aria-label={`Guardrail ${i + 1} maximum drop in percentage points`}
               />
               <span className="edit-prefix">pp</span>
+              <button
+                className="icon-button"
+                type="button"
+                aria-label={`Remove guardrail ${i + 1}`}
+                disabled={disabled}
+                onClick={() => set('guardrails', brief.guardrails.filter((_, j) => j !== i))}
+              >
+                <Trash2 size={14} />
+              </button>
             </div>
           ))}
+          <button
+            className="add-row"
+            type="button"
+            disabled={disabled}
+            onClick={() =>
+              set('guardrails', [
+                ...brief.guardrails,
+                { metric: '', maxDropPp: null, rawText: '' },
+              ])
+            }
+          >
+            <Plus size={13} /> Add a guardrail
+          </button>
 
           <span className="field-label" style={{ marginTop: 18 }}>
             HOW THE TARGET WAS DERIVED

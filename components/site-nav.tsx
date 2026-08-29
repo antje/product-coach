@@ -22,7 +22,7 @@ export function SiteNav() {
         <span className="beta-pill">BETA</span>
       </Link>
       <nav className="topnav" aria-label="Main navigation">
-        <Link href="/" className={active('/')}>
+        <Link href="/review" className={active('/review')}>
           Review
         </Link>
         <Link href="/history" className={active('/history')}>

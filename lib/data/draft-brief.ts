@@ -1,6 +1,37 @@
 import type { Brief } from '@/lib/types'
 
 /**
+ * What the review screen opens on: nothing.
+ *
+ * A prefilled brief invites you to press Review on someone else's thinking. An
+ * empty one asks for yours. The preflight checks then have something honest to
+ * say about it from the first keystroke, for free, before any model is called.
+ *
+ * Every field a check reads starts empty or zero on purpose, so a blank brief
+ * fails all four refusals. That is the correct first impression: this product
+ * refuses things.
+ */
+export const EMPTY_BRIEF: Brief = {
+  id: 'brief-new',
+  title: '',
+  hypothesis: '',
+  mechanism: 'personalization',
+  audience: 'new-workspaces',
+  primaryMetric: '',
+  metricDefinition: '',
+  baselinePp: 0,
+  expectedLiftPp: 0,
+  testType: 'A/B test',
+  splitDescription: '50 / 50 split',
+  weeklyVolume: 0,
+  plannedWeeks: 0,
+  readDate: null,
+  guardrails: [],
+  targetDerivation: null,
+  author: 'You',
+}
+
+/**
  * The brief the review screen opens on.
  *
  * Written to pass every preflight check, so the default path shows the coach

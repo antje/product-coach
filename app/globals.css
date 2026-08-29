@@ -191,6 +191,95 @@ select.edit-strong, select.edit-small { text-transform: capitalize; appearance: 
 .decision-note { color: #9ea69d; font-size: 11px; line-height: 1.55; margin: 12px 0 0; }
 .dropped-note { color: var(--red); font-size: 11px; padding: 0 0 18px; margin: 0; }
 
+/* Empty-brief affordances. */
+.heading-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.edit-hint { color: #6f776f; font-size: 11px; line-height: 1.5; margin: 10px 0 0; }
+.add-row {
+  display: inline-flex; align-items: center; gap: 6px; margin-top: 10px;
+  background: transparent; border: 1px dashed var(--line); border-radius: 4px;
+  color: var(--muted-foreground); font-size: 11px; padding: 7px 10px;
+}
+.add-row:hover:not(:disabled) { border-color: #587442; color: var(--lime); }
+.add-row:disabled { opacity: .5; }
+.guardrail-row .icon-button { padding: 3px; flex-shrink: 0; }
+
+/* What is still missing, shown live while the brief is being written. Runs on
+   the client because preflight is pure arithmetic and costs nothing. */
+.pre-checklist {
+  text-align: left; max-width: 330px; margin: 4px 0 24px; padding: 0;
+  list-style: none; display: flex; flex-direction: column; gap: 9px;
+}
+.pre-checklist li {
+  color: #aeb6ae; font-size: 12px; line-height: 1.5;
+  padding-left: 20px; position: relative;
+}
+.pre-checklist li::before {
+  content: ''; position: absolute; left: 0; top: 5px;
+  width: 9px; height: 9px; border: 1px solid #4f584f; border-radius: 2px;
+}
+
+/* The landing. Restrained rather than decorative: one mark, one name, one
+   sentence, one way in. The only motion is a single entrance, because a page
+   that keeps moving after you have arrived is noise. */
+.landing {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center;
+  padding: 40px 24px 28px; cursor: pointer; position: relative; overflow: hidden;
+}
+/* A single soft pool of light behind the mark, not a gradient wash. */
+.landing::before {
+  content: ''; position: absolute; top: 42%; left: 50%;
+  width: min(620px, 90vw); aspect-ratio: 1; transform: translate(-50%, -50%);
+  background: radial-gradient(circle, #1d2a17 0%, transparent 62%);
+  pointer-events: none;
+}
+.landing:focus-visible { outline: 1px solid #3b5030; outline-offset: -6px; }
+.landing-inner {
+  position: relative; display: flex; flex-direction: column; align-items: center;
+  animation: rise .5s cubic-bezier(.2, .7, .3, 1) both;
+}
+.landing-mark {
+  display: grid; place-items: center; width: 84px; height: 84px;
+  border-radius: 22px; background: var(--lime); color: var(--lime-ink);
+  box-shadow: 0 0 0 10px #18210f, 0 18px 50px -18px #7cc02e;
+}
+.landing-word {
+  font-size: clamp(34px, 6vw, 54px); letter-spacing: -.05em; font-weight: 600;
+  margin: 30px 0 0;
+}
+.landing-claim {
+  max-width: 46ch; color: var(--muted-foreground); font-size: 15px;
+  line-height: 1.65; margin: 16px 0 32px;
+}
+.landing-enter {
+  display: inline-flex; align-items: center; gap: 10px;
+  border: 0; border-radius: 6px; padding: 13px 20px;
+  background: var(--lime); color: var(--lime-ink); font-size: 13px; font-weight: 700;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.landing-enter:hover { transform: translateY(-1px); box-shadow: 0 10px 26px -12px #7cc02e; }
+.landing-enter .shortcut { border-left-color: #708c4e; }
+.landing-meta {
+  display: flex; align-items: center; gap: 12px; margin-top: 30px;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em;
+  text-transform: uppercase; color: #6f776f;
+}
+.landing-meta a { color: #9ea69d; }
+.landing-meta a:hover { color: var(--lime); }
+.landing-foot {
+  position: relative; margin: 0; padding-top: 44px;
+  color: #59615a; font-size: 11px; max-width: 44ch;
+}
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .landing-inner { animation: none; }
+  .landing-enter { transition: none; }
+}
+@media (max-width: 500px) {
+  .landing-mark { width: 68px; height: 68px; border-radius: 18px; }
+  .landing-meta { flex-wrap: wrap; justify-content: center; gap: 8px; }
+}
+
 /* History list and the replay entry point. */
 .history-list { border-top: 1px solid var(--line); }
 .history-row { gap: 16px; }
