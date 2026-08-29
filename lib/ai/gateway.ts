@@ -16,9 +16,14 @@ let client: Anthropic | null = null
 
 function getClient(): Anthropic {
   if (!process.env.ANTHROPIC_API_KEY) {
+    // Two different readers need two different messages. A developer running
+    // this locally needs the file to edit. A visitor on a deployment cannot act
+    // on that advice at all and should just be told the thing is not configured.
     throw new GatewayError(
       'missing-credentials',
-      'ANTHROPIC_API_KEY is not set. Copy .env.example to .env and fill it in.'
+      process.env.VERCEL
+        ? 'This deployment has no model key configured, so it cannot run a review. Everything else on the site works.'
+        : 'ANTHROPIC_API_KEY is not set. Copy .env.example to .env and fill it in.'
     )
   }
   client ??= new Anthropic()

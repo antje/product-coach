@@ -1,6 +1,6 @@
 'use client'
 
-import { use, useCallback, useEffect, useState } from 'react'
+import { use, useCallback, useState } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, Check, Eye, Link2, ShieldAlert, Sparkles, X } from 'lucide-react'
 import { SiteNav } from '@/components/site-nav'
@@ -58,9 +58,11 @@ export default function ReplayPage({ params }: { params: Promise<{ id: string }>
     [replay]
   )
 
-  useEffect(() => {
-    if (status === 'idle') void run()
-  }, [status, run])
+  // Deliberately NOT auto-run on mount. A replay costs a model call, so it
+  // needs an explicit act. Firing on navigation meant anyone who opened a
+  // replay URL spent money without asking for anything, which on a public
+  // deployment is somebody else's money. It also made browsing the history
+  // burn the per-session cap.
 
   if (!known) {
     return (
@@ -129,6 +131,25 @@ export default function ReplayPage({ params }: { params: Promise<{ id: string }>
             <div className="section-label">
               <span>02</span> COACH REVIEW <span className="line" />
             </div>
+
+            {status === 'idle' && (
+              <div className="waiting-card">
+                <div className="coach-symbol">
+                  <Sparkles size={22} />
+                </div>
+                <h2>Review this blind?</h2>
+                <p>
+                  The coach will see only what this team knew before {known.readDate}. You answer,
+                  then the real outcome is revealed and the call is scored.
+                </p>
+                <button className="review-button" onClick={() => void run()} type="button">
+                  <Sparkles size={16} /> Run the replay
+                </button>
+                <div className="waiting-meta">
+                  <span className="pulse" /> One model call
+                </div>
+              </div>
+            )}
 
             {status === 'reviewing' && (
               <div className="waiting-card reviewing">
