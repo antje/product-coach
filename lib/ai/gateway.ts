@@ -109,7 +109,18 @@ export async function generateStructured<T>(
       throw new GatewayError('rate-limited', 'The model is rate limited. Try again shortly.', err)
     }
     if (err instanceof GatewayError) throw err
-    throw new GatewayError('upstream', 'The model call failed.', err)
+
+    // Surface what actually happened. A bare "the model call failed" forces
+    // whoever is debugging to guess between a bad key, a timeout, an
+    // unavailable model and a network fault, which are four different fixes.
+    const detail =
+      err instanceof Anthropic.APIError
+        ? `${err.status ?? 'no status'}: ${err.message}`
+        : err instanceof Error
+          ? err.message
+          : String(err)
+    console.error('[gateway] model call failed', { model, detail })
+    throw new GatewayError('upstream', `The model call failed. ${detail}`, err)
   }
 
   // parsed_output is null when the response did not satisfy the schema.

@@ -9,6 +9,10 @@ import { hasDatabase, NO_DATABASE_MESSAGE } from '@/lib/ledger/db'
 import { experimentToSubject } from '@/lib/types'
 
 export const runtime = 'nodejs'
+// A review takes about 15 seconds. Vercel's default function timeout is 10, so
+// without this the call is killed mid-flight and surfaces as a generic upstream
+// failure that looks like a model problem and is not one.
+export const maxDuration = 60
 
 const Body = z.object({ experimentId: z.string().min(1).max(40) })
 
