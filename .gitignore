@@ -19,3 +19,13 @@ node_modules
 # itself. Kept local: they are working documents, and some of what the strategy
 # and pricing coaches produce does not belong in a public repo.
 product/
+
+# Vercel CLI link state and pulled env
+.vercel
+.env.local
+
+# Agent skills vendored by `npx skills add`. The lockfile is committed so an
+# install is reproducible; the skill bodies are not, the same way node_modules
+# is not.
+.agents/
+.claude/
