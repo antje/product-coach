@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { GatewayError } from '@/lib/ai/gateway'
-import { checkGuardrails, recordSpend } from '@/lib/coach/guardrails'
+import { checkGuardrails } from '@/lib/coach/guardrails'
 import { reviewBrief, ReviewError } from '@/lib/coach/review'
 import { BriefInputSchema } from '@/lib/schemas'
 
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
   }
 
   // Checked before the model call, so a blocked request costs nothing.
-  const gate = await checkGuardrails()
+  const gate = await checkGuardrails(request)
   if (!gate.allowed) {
     return NextResponse.json(
       { error: gate.reason, kind: 'demo-limit', retryable: gate.retryable },
@@ -37,10 +37,6 @@ export async function POST(request: Request) {
 
   try {
     const result = await reviewBrief(parsed.data)
-    // Preflight refusals never reach a model, so they are free and do not count.
-    if (result.kind !== 'preflight-refused') {
-      recordSpend(gate.sessionId, result.usage.costUsd)
-    }
     return NextResponse.json(result)
   } catch (err) {
     if (err instanceof GatewayError) {

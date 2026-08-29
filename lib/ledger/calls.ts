@@ -36,16 +36,17 @@ export async function saveCall(call: {
   promptVersion: string
   model: string
   costUsd: number
+  ipHash: string
 }): Promise<boolean> {
   const sql = db()
   if (!sql) return false
   await sql`
     INSERT INTO calls (id, session_id, kind, experiment_id, subject_json, objection_json,
-                       prompt_version, model, cost_usd, call_outcome)
+                       prompt_version, model, cost_usd, call_outcome, ip_hash)
     VALUES (${call.id}, ${call.sessionId}, ${call.kind}, ${call.experimentId},
             ${JSON.stringify(call.subject)}, ${call.objection ? JSON.stringify(call.objection) : null},
             ${call.promptVersion}, ${call.model}, ${call.costUsd},
-            ${call.objection ? 'untested' : 'not-scored'})
+            ${call.objection ? 'untested' : 'not-scored'}, ${call.ipHash})
   `
   return true
 }

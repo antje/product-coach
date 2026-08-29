@@ -19,7 +19,10 @@ if (!url) {
 }
 
 const sql = neon(url)
-const source = readFileSync(new URL('../lib/ledger/schema.sql', import.meta.url), 'utf8')
+const files = ['../lib/ledger/schema.sql', '../lib/ledger/limits.sql']
+const source = files
+  .map((f) => readFileSync(new URL(f, import.meta.url), 'utf8'))
+  .join('\n')
 
 // Split on semicolons at end of line, ignoring comment-only fragments.
 const statements = source

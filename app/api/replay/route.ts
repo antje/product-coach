@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { GatewayError } from '@/lib/ai/gateway'
-import { checkGuardrails, recordSpend } from '@/lib/coach/guardrails'
+import { checkGuardrails } from '@/lib/coach/guardrails'
 import { assertNoLeakage, replayExperiment } from '@/lib/coach/replay'
 import { ReviewError } from '@/lib/coach/review'
 import { saveCall } from '@/lib/ledger/calls'
@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Expected { experimentId }.' }, { status: 400 })
   }
 
-  const gate = await checkGuardrails()
+  const gate = await checkGuardrails(request)
   if (!gate.allowed) {
     return NextResponse.json(
       { error: gate.reason, kind: 'demo-limit', retryable: gate.retryable },
@@ -37,7 +37,6 @@ export async function POST(request: Request) {
     }
 
     const { experiment, review } = result
-    recordSpend(gate.sessionId, review.usage.costUsd)
 
     // The integrity of the entire exercise. If the coach cited anything that
     // read out on or after the experiment under review, it saw the future and
@@ -58,6 +57,7 @@ export async function POST(request: Request) {
         review.kind === 'objection' ? review.objection.promptVersion : review.usage.promptVersion,
       model: review.usage.model,
       costUsd: review.usage.costUsd,
+      ipHash: gate.ipHash,
     })
 
     return NextResponse.json({
