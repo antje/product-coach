@@ -38,6 +38,17 @@ jobs:
       - name: Check the as-of guard
         run: node scripts/check-asof.mjs
 
+      # A skill's description is the whole retrieval surface. If it stops
+      # triggering, nothing errors and nothing is logged, so this is the only
+      # place the failure becomes visible.
+      - name: Check the skills
+        run: node scripts/check-skills.mjs
+
+      # The linter's own tests. A check nobody tests is a check that can quietly
+      # stop checking, which is the failure mode with no symptom.
+      - name: Test the skill linter
+        run: node --test scripts/check-skills-test.mjs
+
       # Builds without any secrets present, which is deliberate: nothing may
       # read a key at build time, only when a request comes in.
       - name: Build

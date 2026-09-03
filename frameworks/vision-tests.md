@@ -10,9 +10,9 @@ What shifted in the last 2–3 years that makes this the right moment? If the vi
 
 ## 2. Why us? (competitive position)
 
-What do we understand about this market that others haven't seen yet? A durable right to win — genuine asymmetry, not enthusiasm.
+What do we understand about this market that others haven't seen yet? A durable right to win means genuine asymmetry, not enthusiasm.
 
-*Example: Figma — design as a team sport, and only credible browser-native.*
+*Example: Figma. Design as a team sport, and only credible browser-native.*
 
 ## 3. Why us, now? (organizational readiness)
 
@@ -24,4 +24,4 @@ What would need to be true inside the org for this to be achievable? Tension bet
 
 - Apply each test as a direct question and demand a one-sentence answer. Vague answer → failed test.
 - A vision statement that can't settle a team disagreement is not specific enough.
-- Failing "why us, now?" doesn't kill the vision — it defines the capability gap that belongs in the strategy's Capabilities row.
+- Failing "why us, now?" doesn't kill the vision. It defines the capability gap that belongs in the strategy's Capabilities row.

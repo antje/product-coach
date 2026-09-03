@@ -71,6 +71,18 @@ The repo connects straight to Vercel through GitHub. Every push to `main` deploy
 
 Each skill names something it refuses to do, because the refusal is what makes it behave differently rather than merely know things. `/business-case` will not accept an LTV without a churn rate. `/influence` will not let you argue before you know what the other person is protecting. `/signal-read` will not put a number in a deliverable without recomputing it. `/experiment-brief` will not write a brief without a read date fixed before launch. `/monetize` will not aim a pricing change at users who never experienced the product's value.
 
+### What every skill file contains
+
+A refusal only works if it survives being argued with. So each `SKILL.md` carries the same five parts beyond its method:
+
+- **`description`.** The only thing a model sees when deciding whether to load the skill. It says what the skill produces and gives several short "Use when" sentences, each in different words, so a differently phrased request still lands. It deliberately does not summarize the method, because an agent handed a compressed method may follow that instead of loading the file, and then none of the refusals run.
+- **`## When to use`**, with a `When not to use` list that routes you to the right neighbour instead.
+- **`## Common rationalizations`.** A table of the excuse against why it is wrong. This is the part that matters most here. Every one of these skills exists to refuse something, and a refusal with no written answer to "we need to ship by Friday" folds the first time it is tested.
+- **`## Red flags`.** What it looks like when the skill is being followed in name only.
+- **`## Verification`.** Checkboxes that have to be true before the work is done.
+
+`node scripts/check-skills.mjs` enforces all of this, and `node --test scripts/check-skills-test.mjs` tests the linter. Both run in CI. A skill can be exempted from a section only by an entry in the linter's allowlist with a written reason, never by its own frontmatter.
+
 ## How the skills chain (stage gates)
 
 ```

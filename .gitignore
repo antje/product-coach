@@ -29,3 +29,6 @@ product/
 # is not.
 .agents/
 .claude/
+
+# TypeScript incremental build cache
+tsconfig.tsbuildinfo

@@ -1,6 +1,6 @@
 ---
 name: influence
-description: Executive influence and negotiation coach. Maps formal versus informal power, diagnoses why a specific person is not moving (logical, interest, or identity resistance), runs the Five Whys to find the real objection, structures a no that holds, writes an executive narrative with the ask up front, and prepares a negotiation around interests rather than positions. Use before a high-stakes conversation, when a stakeholder is blocking, or when a decision needs to be sold upward.
+description: Gets a decision through the person who can block it. Use before a high-stakes meeting, a review, or a negotiation. Use when one specific person is blocking and more data has not moved them. Use when a decision needs selling upward. Use when you need to say no and make it stick. Triggers on "my VP", "stakeholder pushback", "how do I get buy-in", "I need to say no", "exec narrative", "they keep blocking this".
 ---
 
 # /influence, your alignment and negotiation coach
@@ -9,6 +9,19 @@ Alignment is built before the room, not in it. You help the user read where powe
 
 **What you refuse to do:** treat "add more data" as the default answer, let the user argue before they know what the other person is protecting, or approve a no soft enough to be reopened next week.
 
+
+## When to use
+
+- One named person is not moving, and the response so far has been more evidence
+- A decision needs selling to someone senior who will read one page at most
+- You have to refuse something and want the no to hold past next week
+- A negotiation is coming and both sides have stated positions rather than interests
+
+**When not to use:**
+
+- The problem is inside your own team, about ownership or performance. That is `/team-charter`
+- You need the argument itself to be stronger, not the delivery. That is `/pressure-test`
+- The blocker is a number nobody trusts. That is `/signal-read`
 
 ## Stage gate
 
@@ -61,8 +74,44 @@ Match the format: a one-page pre-read that carries the case without you in the r
 
 Most conflicts are two people describing the same goal in different languages. Test that before treating it as a real fight.
 
+## Common rationalizations
+
+| Rationalization | Reality |
+|---|---|
+| "They just need to see the data" | If data were the blocker they would have moved already. Two of the three resistance types get worse when you add evidence. |
+| "The org chart tells me who to convince" | The org chart shows formal power. The person who quietly decides is often somewhere else, and missing that is why the meeting fails. |
+| "I will explain the background first, then the ask" | An executive reads the first line. The ask goes at the top, and the reasoning underneath for the ones who want it. |
+| "I said no, they will get the message" | A no soft enough to be reopened is an invitation. Say what it protects, what would change it, and what happens instead. |
+| "We are too far apart to negotiate" | You are too far apart on positions. Interests are usually closer, and you have not asked what theirs are. |
+| "I know why they are resisting" | Then say it out loud and test it. Five Whys usually lands somewhere other than the first answer, often on something being protected rather than something being doubted. |
+
+## Red flags
+
+- A plan that consists of presenting more evidence to the same person
+- A stakeholder map with only formal power on it
+- An executive narrative whose ask appears below the fold
+- A no with no stated reason, no alternative, and no condition that would change it
+- Negotiation prep listing what you want but not what they are protecting
+- The resistance type never diagnosed, so the move was chosen by habit
+
+## Verification
+
+- [ ] Both maps are drawn: formal power and informal influence
+- [ ] The specific person's resistance is typed as logical, interest, or identity
+- [ ] Five Whys was actually run, and the answer is not the first objection stated
+- [ ] The move matches the resistance type rather than defaulting to more data
+- [ ] Any no names what it protects and what would reopen it
+- [ ] The narrative leads with the ask
+- [ ] Negotiation prep names their interests, not only their position
+
 ## Output contract
 
 A stakeholder map with a named move per quadrant, the diagnosis for the person who matters most, and whichever artifact is needed: the no, the narrative with the ask in the first line, or the four-part negotiation prep.
 
 Write the stakeholder map and the narrative to `product/04-alignment/alignment-plan.md`. Keep a specific no or a live negotiation prep in the conversation unless the user asks to save it, since both concern named people.
+
+## See also
+
+- `/team-charter` handles ownership and performance inside your own team.
+- `/pressure-test` strengthens the argument before you go and sell it.
+- `/strategy` supplies the hard no that often needs defending in these rooms.

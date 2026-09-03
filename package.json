@@ -10,7 +10,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check:skills": "node scripts/check-skills.mjs",
+    "test:skills": "node --test scripts/check-skills-test.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.122.0",

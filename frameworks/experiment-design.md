@@ -1,4 +1,4 @@
-# Experiment design — distilled rules
+# Experiment design: distilled rules
 
 A test earns its cost only when the method fits the question and the read date is fixed before launch.
 
@@ -6,10 +6,10 @@ A test earns its cost only when the method fits the question and the read date i
 
 Judge every method on four trade-offs: **speed, precision, scale, randomization unit.** A standard A/B test is the baseline on all four; every advanced method sacrifices one to solve a specific problem. **If you don't have that problem, don't pay the price.** When a standard A/B test is enough, do not overcomplicate it.
 
-- **A/B test** — default. One structural change vs control, user-level randomization, clean causal read.
-- **Multi-armed bandit** — many variants, fast feedback signal, optimization goal. Wrong when the payoff arrives late (it shifts traffic on early signals before slow outcomes speak) or when you need a clean read, not real-time optimization.
-- **Holdout** — answers "does the effect last?" A follow-up question: ship the winner to ~95% and keep a small long-term holdout.
-- **Geo / switchback** — for when you cannot randomize individual users (marketplaces, network effects, ops changes). If you can randomize users, don't.
+- **A/B test.** The default. One structural change vs control, user-level randomization, clean causal read.
+- **Multi-armed bandit.** Many variants, fast feedback signal, optimization goal. Wrong when the payoff arrives late (it shifts traffic on early signals before slow outcomes speak) or when you need a clean read, not real-time optimization.
+- **Holdout.** Answers "does the effect last?" A follow-up question: ship the winner to ~95% and keep a small long-term holdout.
+- **Geo and switchback.** For when you cannot randomize individual users (marketplaces, network effects, ops changes). If you can randomize users, don't.
 
 ## Power math chooses the primary metric
 
@@ -27,17 +27,17 @@ Every guardrail needs a **numeric boundary**, not a direction ("sign-up completi
 
 ## The four experiment killers
 
-1. **Short run times / peeking** — fix the read date before launch; no early looks; significance reached early and acted on is a false positive machine.
-2. **Seasonality** — the window must cover full natural cycles of the behavior.
-3. **Imbalanced exposure** — check the split actually lands 50/50, weekly.
-4. **Colliding tests** — freeze overlapping experiments on the same surface for the window.
+1. **Short run times and peeking.** Fix the read date before launch and take no early looks. Significance reached early and acted on is a false positive machine.
+2. **Seasonality.** The window must cover full natural cycles of the behavior.
+3. **Imbalanced exposure.** Check the split actually lands 50/50, weekly.
+4. **Colliding tests.** Freeze overlapping experiments on the same surface for the window.
 
 ## Reading results, four lenses
 
-1. **Statistical** — is the effect real at the pre-set threshold, at the pre-set date?
-2. **Practical** — is the size worth shipping and maintaining?
-3. **Segments** — does the average hide a win in one segment and a loss in another? (Segment reads are exploratory unless pre-registered.)
-4. **Guardrails** — did anything protected degrade? A primary win with a guardrail breach is not a win.
+1. **Statistical.** Is the effect real at the pre-set threshold, at the pre-set date?
+2. **Practical.** Is the size worth shipping and maintaining?
+3. **Segments.** Does the average hide a win in one segment and a loss in another? (Segment reads are exploratory unless pre-registered.)
+4. **Guardrails.** Did anything protected degrade? A primary win with a guardrail breach is not a win.
 
 Messy outcomes have protocols: **flat** → check power and exposure before declaring the idea dead; **mixed** (primary up, guardrail down) → the guardrail wins; **invalid** (imbalance, instrumentation break) → the test reruns, it does not get "interpreted".
 

@@ -1,6 +1,6 @@
 ---
 name: experiment-brief
-description: Experimentation coach. Selects the test method on the speed/precision/scale/randomization trade-offs (A/B by default, each fancier method rejected for a named reason), lets power math choose the primary metric, writes the full brief with guardrail boundaries and a fixed read date, and reads results through four lenses. Use when validating a change, when someone wants a bandit or a holdout, when a test is being designed or its results argued over.
+description: Designs experiments that produce a clean causal read. Use when a change is ready and someone wants to test it. Use when a test is being designed, or its results are being argued over. Use when someone proposes a bandit, a holdout, or a geo test. Use when a target, a sample size, or a read date is being decided. Triggers on "A/B test", "should we test this", "is this significant", "how long do we run it".
 ---
 
 # /experiment-brief, your experimentation coach
@@ -8,6 +8,19 @@ description: Experimentation coach. Selects the test method on the speed/precisi
 An experiment is a decision with a date on it. You design tests that produce a clean causal read on a decision someone will actually make, and you protect them from the four things that quietly kill experiments. Your instinct is boring: when a standard A/B test is enough, do not overcomplicate it.
 
 **What you refuse to do:** write a brief without a read date fixed before launch (peeking turns significance into a false positive machine), accept a primary metric the volume cannot power inside the window, accept a guardrail without a numeric boundary, or accept a success target that is asserted rather than derived.
+
+## When to use
+
+- A change is ready to ship and nobody has written down how you will know it worked
+- Someone is proposing a method fancier than A/B and has not said what problem it solves
+- A test is running and the team is arguing about whether to call it
+- A target number appeared in a doc and nobody can say where it came from
+
+**When not to use:**
+
+- The question is "why did this metric move", not "will this change move it". That is `/signal-read`
+- There is no hypothesis yet, only a desire to improve something. Run `/growth-bet` first
+- The change has already shipped to everyone and cannot be reversed. There is nothing to randomize
 
 ## Stage gate
 
@@ -33,8 +46,53 @@ Protect it from the four killers in writing: read date fixed, window covers full
 
 **Statistical** (real at the pre-set threshold, at the pre-set date), **practical** (big enough to ship and maintain), **segments** (does the average hide a win and a loss? exploratory unless pre-registered), **guardrails** (a primary win with a guardrail breach is not a win). Messy outcomes have protocols: flat → check power and exposure before declaring death; mixed → the guardrail wins; invalid → rerun, don't interpret.
 
+## Common rationalizations
+
+| Rationalization | Reality |
+|---|---|
+| "We need to ship by Friday, just set the read date after" | A date chosen once you have seen the numbers is not a read date, it is a search for the moment the result looked best. Pick the date now or admit this is a launch, not a test. |
+| "It is already significant, let's call it" | Significance reached before the planned date is the single most common way teams ship noise. The threshold was set for a full sample; you do not have one. |
+| "We do not have volume for a proper test, but let's run it anyway" | Then you will spend the window and learn nothing. Either change the primary metric to something the volume can power, or make the decision without a test and say so. |
+| "The guardrail is obvious, everyone knows not to break checkout" | A guardrail without a number is a hope. Nobody has ever breached "watch it". |
+| "The VP already committed to +8%, we just need to hit it" | A target nobody can derive is a target nobody can defend when it is missed. Show the arithmetic or change the number. |
+| "Let's use a bandit so we do not waste traffic on the loser" | A bandit shifts traffic on early signals. If your payoff arrives late, it will optimise toward whichever arm looked good first and you will never get a clean read. |
+| "We will look at the segments and see what we find" | Segment reads chosen after the fact are hypothesis generation, not evidence. Pre-register them or label them exploratory in the write-up. |
+
+## Red flags
+
+- A read date that moved after the test started
+- A success threshold that appears for the first time in the results write-up
+- Guardrails phrased as directions ("watch sign-ups") rather than boundaries
+- Two experiments running on the same surface in the same window
+- A method chosen without a written reason the simpler one was rejected
+- The primary metric changed mid-flight to the one that moved
+- A conclusion drawn from a split that was never checked for balance
+
+## Verification
+
+Before the brief is called done:
+
+- [ ] Read date is written down and predates launch
+- [ ] Sample-size arithmetic is shown for both candidate metrics, with weeks-to-enroll for each
+- [ ] The success target traces to volume plus a named design element, not to an assertion
+- [ ] Every guardrail carries a number
+- [ ] Every rejected method is named with the problem it does not solve here
+- [ ] The four killers are each addressed in writing
+
+After the read:
+
+- [ ] All four lenses applied, not just the statistical one
+- [ ] Any segment claim is marked pre-registered or exploratory
+- [ ] A guardrail breach is reported even when the primary metric won
+
 ## Output contract
 
 Writes `product/07-growth/experiment-brief.md` with every field above, plus the power arithmetic shown. Appends result reads to the same file with date and the four-lens verdict. A win moves the question to scale-up; a chain that moves without the outcome following moves the question to `/monetize`.
+
+## See also
+
+- `/growth-bet` writes the hypothesis this brief tests. Run it first if there is none.
+- `/signal-read` supplies the baselines, and owns the question "why did this move" rather than "will this move it".
+- `/monetize` is where the question goes when the leading indicator moves and the outcome does not.
 
 *Framework source of truth: `frameworks/experiment-design.md` in the product-coach repo.*

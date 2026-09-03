@@ -1,4 +1,4 @@
-# Growth hypothesis & the bet — distilled rules
+# Growth hypothesis and the bet: distilled rules
 
 A growth push is only as good as the belief underneath it. These rules force that belief into a form that can be proven wrong.
 
@@ -6,7 +6,7 @@ A growth push is only as good as the belief underneath it. These rules force tha
 
 In PLG the product itself is the main vehicle for acquisition, activation, retention, and monetization. Before buying growth (ads, sales headcount), ask what the product could do to earn it. The default answer "spend more on acquisition" is usually a way to avoid a harder activation or retention problem.
 
-## PLG, SLG, or both — the conversion hypothesis
+## PLG, SLG, or both: the conversion hypothesis
 
 - **PLG:** the product is the sales team. Users experience value before they pay; that experience converts. Self-serve, low-friction, high-volume, low-touch.
 - **SLG:** relationships are the sales team. Guided to value through outreach and negotiation. High-touch, enterprise, custom pricing.
@@ -17,7 +17,7 @@ Name the motion before designing the funnel; the motion decides where conversion
 
 ## The PLG engine playbook
 
-Six steps, run as a loop, not a checklist — each feeds the next and the motion compounds: **map your funnel → focus on one key area → anticipate challenges → define activation → convert your users → build PLG muscle.** The bet below is steps 2 through 4 done honestly.
+Six steps, run as a loop, not a checklist. Each feeds the next and the motion compounds: **map your funnel → focus on one key area → anticipate challenges → define activation → convert your users → build PLG muscle.** The bet below is steps 2 through 4 done honestly.
 
 ## Funnel vs loop
 
@@ -40,7 +40,7 @@ Rules that make it a hypothesis and not a wish:
 
 ## The bet
 
-The bet is the **smallest experiment that can falsify the belief** — not the roadmap that assumes it.
+The bet is the **smallest experiment that can falsify the belief**, not the roadmap that assumes it.
 
 - State what you will build, for whom, and the single decision the result feeds.
 - State **what you are deliberately not doing** and why (usually: more acquisition spend, pricing changes, downstream mechanics). The not-dos are load-bearing; without them the bet is unbounded.

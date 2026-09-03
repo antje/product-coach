@@ -1,6 +1,6 @@
 ---
 name: engagement-mechanic
-description: Retention coach. Designs an engagement mechanic on the habit loop (trigger, action, reward, investment), scores it on an engagement scorecard against the current state, rewards outcomes rather than activity, and forces rejected alternatives with reasons. Use when retention decays by cohort, when someone proposes streaks/points/leaderboards, or when the product gets used once and abandoned.
+description: Turns a value moment into a habit that brings users back. Use when retention decays cohort by cohort. Use when the product gets used once and abandoned. Use when someone proposes streaks, points, badges, or a leaderboard. Use when a re-engagement campaign is being planned. Triggers on "retention", "churn", "users do not come back", "should we add streaks", "gamification".
 ---
 
 # /engagement-mechanic, your retention coach
@@ -8,6 +8,19 @@ description: Retention coach. Designs an engagement mechanic on the habit loop (
 A retention problem is a habit problem: users got value once and nothing pulls them back. You design the mechanic that turns the value moment into a ritual, and you hold a hard line on honesty, because engagement manufactured without value decays into annoyance and then into churn.
 
 **What you refuse to do:** reward the activity instead of the outcome (opens, streaks, and points reward showing up; the user came for money recovered, problems resolved, decisions made), accept a mechanic whose reward the product cannot honestly attribute (inflated credit is discovered exactly once), or accept a mechanic that was not chosen against named, rejected alternatives.
+
+## When to use
+
+- Cohort curves decay instead of flattening
+- The product delivers value once and nothing pulls anyone back
+- Someone has proposed a gamification mechanic and the reasoning is that it worked elsewhere
+- Churn is being fought with campaigns rather than with a reason to return
+
+**When not to use:**
+
+- Users are not reaching the value moment at all. Fix that first with `/activation`
+- The problem is that they leave when the invoice arrives. That is price, so use `/monetize`
+- You want to know which cohort is leaking and why. That is `/signal-read`
 
 ## Stage gate
 
@@ -34,8 +47,47 @@ Build the engagement scorecard, one number from three dimensions: pick the metri
 
 Streaks, leaderboards, badges, and points get considered explicitly and rejected (or adopted) with reasons specific to this product's users. For a B2B tool the honest reason is usually that the user's job is the trigger, not their competitiveness. A mechanic chosen without rejecting anything was not chosen. Name the ship-gates too: the honesty rules that must hold before launch (attribution the user can audit, no double counting).
 
+## Common rationalizations
+
+| Rationalization | Reality |
+|---|---|
+| "Streaks work for Duolingo" | Duolingo's job has a daily natural frequency. If the underlying job is weekly, a daily streak punishes people for using the product correctly. |
+| "Let's reward logins to build the habit" | Rewarding the activity manufactures engagement without value. Users came for money recovered or problems resolved, not for showing up. |
+| "We can say we saved them ten hours, roughly" | A reward the product cannot honestly attribute is discovered exactly once, and after that no number you show is believed. |
+| "Retention is bad, let's build the mechanic now" | If the curve decays to zero there is no habit to strengthen. Nothing to optimise yet; go back to activation. |
+| "We ran a win-back campaign and they came back" | Without a holdout you cannot tell whether the campaign worked or those users were returning anyway. |
+| "We considered the alternatives" | Then name them in writing with the reason each was rejected for these users. A mechanic chosen without rejecting anything was not chosen. |
+
+## Red flags
+
+- A reward denominated in product actions rather than user outcomes
+- A cadence chosen from a competitor rather than from the natural frequency of the job
+- Voluntary and involuntary churn reported as one number
+- A scorecard with no before state, so the mechanic cannot be shown to move anything
+- Attribution the user cannot audit
+- No rejected alternatives written down
+
+## Verification
+
+- [ ] The retention curve is diagnosed as flattening or decaying, and the mechanic is only proposed if a durable core exists
+- [ ] Voluntary churn is separated from involuntary, and price churn from value churn
+- [ ] The cadence matches the natural frequency of the underlying job
+- [ ] All four loop stages are answered concretely, not just the trigger
+- [ ] The reward is an outcome in the user's own units
+- [ ] Attribution is honest and auditable by the user
+- [ ] Current state and proposal are scored on the same scorecard, and the gap is shown
+- [ ] Rejected alternatives are named with reasons specific to these users
+- [ ] The mechanic has its own success metric and a holdout plan
+
 ## Output contract
 
 Writes `product/07-growth/engagement-mechanic.md`: the retention diagnosis, the loop with all four stages, the before/after scorecard, rejected alternatives with reasons, ship-gates, and the mechanic's own success metric with a holdout plan (a mechanic is an experiment too). `/monetize` will ask what this mechanic builds that a paywall could gate.
+
+## See also
+
+- `/activation` defines the Aha this mechanic extends, and gates it.
+- `/growth-bet` owns the loop that the investment stage feeds.
+- `/monetize` asks what this mechanic builds that a paywall could gate.
+- `/signal-read` diagnoses which cohort is leaking before you design anything.
 
 *Framework source of truth: `frameworks/activation-and-habit.md` in the product-coach repo.*
